@@ -40,7 +40,7 @@ FROM master..spotify200$
 WHERE [Artist Followers] IS NULL
 
 --- Turns out there are still null values left for artists who only got listed once 
--- Replace the NULL values with the data from spotify
+-- Replace the NULL values with the data from Spotify App
 -- Chris Rae - 654062
 -- Super Yei - 295238
 -- Dalex - 3,673,189
@@ -81,6 +81,7 @@ WHERE
     Popularity IS NULL
 
 
+
 --- Identify Unique Values in Song Name 
 
 SELECT Artist, [Artist Followers], [Song Name]
@@ -96,7 +97,7 @@ WHERE
 
  
 
---- Split data into different columns and extract the first value
+--- Split the Genre data into different columns and extract the first value 
 
 SELECT Genre, 
 LEFT(Genre, CHARINDEX(',', Genre)) AS Genre1
@@ -144,7 +145,8 @@ END
 
 
 		
---- Split the week of highest charting data to two columns and change the the datatype from varchar to date
+--- Split the week of highest charting data into two columns and change the the datatype from varchar to date
+
 SELECT [Week of Highest Charting],
 	PARSENAME(REPLACE([Week of Highest Charting], '--','.'), 2) AS Start_week,
 	PARSENAME(REPLACE([Week of Highest Charting], '--','.'), 1) AS End_week
@@ -157,7 +159,7 @@ UPDATE master..spotify200$
 SET Highest_Charting_Week = PARSENAME(REPLACE([Week of Highest Charting], '--','.'), 1)
 
 
---- Split Artist Name 
+--- Split Artist Name column and only extract the first value 
 
 SELECT Artist, 
 LEFT(Artist, CHARINDEX(',', Artist)) AS Main_Artist
@@ -178,16 +180,13 @@ SET Artist = CASE
 
 
 --- Delete Unused Column 
+
 ALTER TABLE master..spotify200$
 DROP COLUMN [Week of Highest Charting], [Song ID], Genre, [Release Date], [Weeks Charted], Danceability, Energy, Loudness, Speechiness, Acousticness, Liveness, Tempo, [Duration (ms)], Valence, Chord 
 
 
 
 --- 2) Explore Data
-SELECT*
-FROM master..spotify200$
-
-
 --- Top 30 Most Popular Artist by Total Number of Times Charted  
 
 SELECT DISTINCT TOP 30 Artist, SUM([Number of Times Charted]) AS Total_Number_of_Times_Charted
@@ -239,11 +238,14 @@ ORDER BY Streams DESC
 
 
 --- Classify Song based on Popularity
+--- First, identify the mean, min, and max value in the popularity column 
+
 SELECT AVG(Popularity) AS Mean, 
 	   MIN(Popularity) AS Min,
 	   MAX(Popularity) AS Max
 FROM master..spotify200$
 
+--- Then , classify them
 
 SELECT Popularity,
   CASE 
@@ -271,7 +273,7 @@ END
 
 
 
---- Genre Percentage (Other -- latin, remix, edm , alt z
+--- Genre Percentage 
 SELECT Genre1, 
 COUNT(*) * 100.0/ SUM(COUNT(*)) OVER() AS Percentage
 FROM master..spotify200$
