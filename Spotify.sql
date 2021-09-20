@@ -120,7 +120,7 @@ SELECT Genre,
 		    WHEN Genre LIKE '%soul%' THEN 'Soul music'
             WHEN Genre LIKE '%funk%' THEN 'Funk'
 			WHEN Genre LIKE '%rock%' THEN 'Rock'
-			WHEN Genre LIKE '%r&b' THEN 'R&B'
+			WHEN Genre LIKE '%r&b%' THEN 'R&B'
             ELSE 'Other' 
 		END AS Genre1
 FROM master..spotify200$
