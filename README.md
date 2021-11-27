@@ -1,4 +1,4 @@
-# Spotify-Top-200-Charts-2020-2021-with-SQL
+# Spotify-Top-200-Charts-with-SQL
 
 Aim: This project analyses the spotify top 200 charts during 2020 to 2021 to provide a summary on the most popular song, artist, song genre, and song category in Spotify during 2020 to 2021. 
 
